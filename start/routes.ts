@@ -20,6 +20,13 @@
 
 import Route from '@ioc:Adonis/Core/Route'
 
+
 Route.get('/', async () => {
   return { hello: 'world' }
 })
+
+Route.post('/signin', 'UsersController.authenticate')
+Route.post('/signup', 'UsersController.register')
+Route.post('/create-token', 'UsersController.createToken')
+Route.post('/authenticate-token', 'UsersController.authenticateToken').middleware("auth")
+Route.get('/notifications', 'NotificationsController.index').middleware("auth")
