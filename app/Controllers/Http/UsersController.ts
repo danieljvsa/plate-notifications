@@ -7,13 +7,13 @@ import Mail from '@ioc:Adonis/Addons/Mail'
 import argon2 from 'phc-argon2'
 
 export default class UsersController {
-    async register({request, response}: HttpContextContract){
+    async register({request, response, auth}: HttpContextContract){
         
         const data = request.only(['email', 'password'])
     
         const user = await User.create(data)
-    
-        return response.json(user)
+        const token = await auth.use('api').attempt(data.email, data.password)
+        return response.status(200).json({token: token, user: user})
         
     }
     
@@ -23,7 +23,7 @@ export default class UsersController {
       const token = await auth.use('api').attempt(email, password)
       const user = await User.findBy('email', email)
   
-      return response.json({token: token, user: user})
+      return response.status(200).json({token: token, user: user})
     }
 
     async createToken({request, response}: HttpContextContract){
