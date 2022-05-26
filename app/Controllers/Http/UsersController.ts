@@ -5,7 +5,7 @@ import crypto from 'crypto'
 import Notification from 'App/Models/Notification'
 import Mail from '@ioc:Adonis/Addons/Mail'
 import argon2 from 'phc-argon2'
-import axios from 'axios'
+//import axios from 'axios'
 
 export default class UsersController {
     async register({request, response, auth}: HttpContextContract){
