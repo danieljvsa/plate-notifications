@@ -7,4 +7,15 @@ export default class NotificationsController {
 
         return response.status(200).send(notifications)
     }
+    async destroy({params, response, auth}: HttpContextContract) {
+        const notification = await Notification.findByOrFail('id', params.id)
+
+        if(notification.user_id == auth.user!.user_id){
+            notification.delete()
+        }
+        //await plate.delete()
+        //console.log(notification)
+        
+        return response.status(200).send('Notification deleted.')
+    }
 }

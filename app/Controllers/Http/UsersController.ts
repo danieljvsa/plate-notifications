@@ -5,6 +5,7 @@ import crypto from 'crypto'
 import Notification from 'App/Models/Notification'
 import Mail from '@ioc:Adonis/Addons/Mail'
 import argon2 from 'phc-argon2'
+import axios from 'axios'
 
 export default class UsersController {
     async register({request, response, auth}: HttpContextContract){
@@ -51,8 +52,8 @@ export default class UsersController {
            message.from("danielviana18@gmail.com").to(user.email).subject('New entry in yout garage!').htmlView('emails/notification', { token: token })
           })
           //console.log(plate + " " + user_id + " "+ token)
-          await Notification.create({ token: token, message: `Are you driving the car with ${plate} number plate?`, user_id: user.user_id})
-          return response.status(200).send({ message: `Are you driving the car with ${plate} number plate?`})
+          await Notification.create({ token: token, message: `${plate}`, user_id: user.user_id})
+          return response.status(200).send({ message: `${plate}`})
             
           
         }else{
@@ -70,6 +71,7 @@ export default class UsersController {
       const validPassword = await argon2.verify(user?.password, password);
       console.log(validPassword)
       if(validPassword == true && token == auth.user?.remember_me_token){
+        axios.get(`${process.env.PI_ADDRESS}/token`)
         response.status(200).send('Authorized')
       }else{
         response.status(400).send('Unauthorized')
