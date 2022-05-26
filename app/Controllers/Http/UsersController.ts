@@ -71,7 +71,8 @@ export default class UsersController {
       const validPassword = await argon2.verify(user?.password, password);
       console.log(validPassword)
       if(validPassword == true && token == auth.user?.remember_me_token){
-        axios.get(`http://${process.env.PI_ADDRESS}:3333/token`)
+        const result = await axios.get(`http://${process.env.PI_ADDRESS}:3333/led`)
+        console.log(result)
         response.status(200).send('Authorized')
       }else{
         response.status(400).send('Unauthorized')
