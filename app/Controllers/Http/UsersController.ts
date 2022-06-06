@@ -5,7 +5,7 @@ import crypto from 'crypto'
 import Notification from 'App/Models/Notification'
 import Mail from '@ioc:Adonis/Addons/Mail'
 import argon2 from 'phc-argon2'
-//import axios from 'axios'
+import axios from 'axios'
 
 export default class UsersController {
     async register({request, response, auth}: HttpContextContract){
@@ -71,8 +71,8 @@ export default class UsersController {
       const validPassword = await argon2.verify(user?.password, password);
       console.log(validPassword)
       if(validPassword == true && token == auth.user?.remember_me_token){
-        //const result = await axios.get(`http://${process.env.PI_ADDRESS}:3333/led`)
-        //console.log(result)
+        const result = await axios.get(`http://${process.env.PI_ADDRESS}/led`)
+        console.log(result)
         response.status(200).send('Authorized')
       }else{
         response.status(400).send('Unauthorized')
